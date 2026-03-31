@@ -1,0 +1,92 @@
+{
+  "version": "0.1.0",
+  "name": "token_swap",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        { "name": "tokenSwap",    "isMut": true,  "isSigner": false },
+        { "name": "authority",    "isMut": false, "isSigner": false },
+        { "name": "tokenA",       "isMut": false, "isSigner": false },
+        { "name": "tokenB",       "isMut": false, "isSigner": false },
+        { "name": "pool",         "isMut": true,  "isSigner": false },
+        { "name": "feeAccount",   "isMut": false, "isSigner": false },
+        { "name": "destination",  "isMut": true,  "isSigner": false },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "nonce",                     "type": "u8"  },
+        { "name": "tradeFeeNumerator",         "type": "u64" },
+        { "name": "tradeFeeDenominator",       "type": "u64" },
+        { "name": "ownerTradeFeeNumerator",    "type": "u64" },
+        { "name": "ownerTradeFeeDenominator",  "type": "u64" },
+        { "name": "hostFeeNumerator",          "type": "u64" },
+        { "name": "hostFeeDenominator",        "type": "u64" },
+        { "name": "curveType",                 "type": "u8"  }
+      ]
+    },
+    {
+      "name": "swap",
+      "accounts": [
+        { "name": "tokenSwap",            "isMut": false, "isSigner": false },
+        { "name": "authority",            "isMut": false, "isSigner": false },
+        { "name": "userTransferAuthority","isMut": false, "isSigner": true  },
+        { "name": "source",               "isMut": true,  "isSigner": false },
+        { "name": "swapSource",           "isMut": true,  "isSigner": false },
+        { "name": "swapDestination",      "isMut": true,  "isSigner": false },
+        { "name": "destination",          "isMut": true,  "isSigner": false },
+        { "name": "poolMint",             "isMut": true,  "isSigner": false },
+        { "name": "poolFee",              "isMut": true,  "isSigner": false },
+        { "name": "tokenProgram",         "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amountIn",         "type": "u64" },
+        { "name": "minimumAmountOut", "type": "u64" }
+      ]
+    },
+    {
+      "name": "depositAllTokenTypes",
+      "accounts": [
+        { "name": "tokenSwap",            "isMut": false, "isSigner": false },
+        { "name": "authority",            "isMut": false, "isSigner": false },
+        { "name": "userTransferAuthority","isMut": false, "isSigner": true  },
+        { "name": "sourceA",              "isMut": true,  "isSigner": false },
+        { "name": "sourceB",              "isMut": true,  "isSigner": false },
+        { "name": "tokenA",               "isMut": true,  "isSigner": false },
+        { "name": "tokenB",               "isMut": true,  "isSigner": false },
+        { "name": "poolMint",             "isMut": true,  "isSigner": false },
+        { "name": "destination",          "isMut": true,  "isSigner": false },
+        { "name": "tokenProgram",         "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "poolTokenAmount",      "type": "u64" },
+        { "name": "maximumTokenAAmount",  "type": "u64" },
+        { "name": "maximumTokenBAmount",  "type": "u64" }
+      ]
+    },
+    {
+      "name": "withdrawAllTokenTypes",
+      "accounts": [
+        { "name": "tokenSwap",            "isMut": false, "isSigner": false },
+        { "name": "authority",            "isMut": false, "isSigner": false },
+        { "name": "userTransferAuthority","isMut": false, "isSigner": true  },
+        { "name": "poolMint",             "isMut": true,  "isSigner": false },
+        { "name": "sourcePoolAccount",    "isMut": true,  "isSigner": false },
+        { "name": "fromA",                "isMut": true,  "isSigner": false },
+        { "name": "fromB",                "isMut": true,  "isSigner": false },
+        { "name": "userAccountA",         "isMut": true,  "isSigner": false },
+        { "name": "userAccountB",         "isMut": true,  "isSigner": false },
+        { "name": "feeAccount",           "isMut": true,  "isSigner": false },
+        { "name": "tokenProgram",         "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "poolTokenAmount",      "type": "u64" },
+        { "name": "minimumTokenAAmount",  "type": "u64" },
+        { "name": "minimumTokenBAmount",  "type": "u64" }
+      ]
+    }
+  ],
+  "accounts": [],
+  "types": [],
+  "errors": []
+}

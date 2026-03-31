@@ -1,0 +1,16 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.log
+coverage
+.nyc_output
+.git
+.gitignore
+README.md
+docker-compose.dev.yml
+tests
+*.test.ts
+.eslintrc*
+.prettierrc*

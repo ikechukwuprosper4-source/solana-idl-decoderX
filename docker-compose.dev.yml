@@ -1,0 +1,19 @@
+version: "3.9"
+
+# Development override — mounts source for hot-reload
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  api:
+    build:
+      target: builder
+    command: ["npx", "ts-node-dev", "--respawn", "--transpile-only", "src/index.ts"]
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: debug
+    ports:
+      - "3000:3000"
+      - "9229:9229" # Node inspector

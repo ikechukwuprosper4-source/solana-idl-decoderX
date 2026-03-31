@@ -1,0 +1,77 @@
+version: "3.9"
+
+services:
+  # ─── API Service ─────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: solana-idl-decoder-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      REDIS_URL: redis://redis:6379
+      MAINNET_RPC_URL: ${MAINNET_RPC_URL:-https://api.mainnet-beta.solana.com}
+      DEVNET_RPC_URL: ${DEVNET_RPC_URL:-https://api.devnet.solana.com}
+      TESTNET_RPC_URL: ${TESTNET_RPC_URL:-https://api.testnet.solana.com}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-200}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    networks:
+      - idl-net
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ─── Redis ────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: solana-idl-decoder-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --save 60 1
+      --loglevel warning
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - idl-net
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+# ─── Development override target ──────────────────────────────────────────────
+# Use: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  idl-net:
+    driver: bridge
